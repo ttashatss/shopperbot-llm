@@ -18,5 +18,6 @@ def query(client, model, index, prompt:str):
     
     response = generate_answer(client=client, prompt=prompt, contents=contents)
     var_fn.update({'response': response})
+    answer = var_fn.get('response', '')
     
-    return var_fn
+    return answer
