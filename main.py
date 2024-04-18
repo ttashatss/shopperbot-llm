@@ -32,5 +32,6 @@ async def api_post(input: Input):
 
 # if __name__ == "__main__":
 #     # prompt = 'Siam Paragon Car park'
-#     # print(query(client, model, index, prompt))
-    
+#     # print(query(client, model, index, prompt)) 
+
+#Hi   
