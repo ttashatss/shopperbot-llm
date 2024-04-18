@@ -25,6 +25,7 @@ app = FastAPI()
 
 @app.post("/")
 async def api_post(input: Input):
+    print(input)
     answer = query(client, model, index, input.prompt)
     return answer
     
