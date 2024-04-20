@@ -15,23 +15,23 @@ model = 'text-embedding-ada-002'
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index = pc.Index(INDEX_NAME)
 
-class Input(BaseModel):
-    userId: str
-    userInfo: Optional[str] = None
-    prompt: str
-    location: Optional[str] = None
+# class Input(BaseModel):
+#     userId: str
+#     userInfo: Optional[str] = None
+#     prompt: str
+#     location: Optional[str] = None
 
-app = FastAPI()
+# app = FastAPI()
 
-@app.post("/")
-async def api_post(input: Input):
-    print(input)
-    answer = query(client, model, index, input.prompt)
-    return answer
+# @app.post("/")
+# async def api_post(input: Input):
+#     print(input)
+#     answer = query(client, model, index, input.prompt)
+#     return answer
     
 
-# if __name__ == "__main__":
-#     # prompt = 'Siam Paragon Car park'
-#     # print(query(client, model, index, prompt)) 
+if __name__ == "__main__":
+    prompt = 'From this question, what is the correct choice - you can answer with only one letter A, B, C, or D? Question: What is the capital of France? Choice: A. Paris B. London C. Berlin D. Madrid'
+    print(query(client, model, index, prompt)) 
 
 #Hi   
