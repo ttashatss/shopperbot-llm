@@ -1,23 +1,37 @@
-from functions.query_index import query_index
-from functions.read_docs import read_docs
-from functions.generate_answer import generate_answer
+from keys.keys import PINECONE_API_KEY, OPENAI_API_KEY
 
-def query(client, model, index, prompt:str):
+from pinecone import Pinecone, ServerlessSpec
+from tqdm import tqdm
+pc = Pinecone(api_key=PINECONE_API_KEY)
+
+from openai import OpenAI
+client = OpenAI(api_key=OPENAI_API_KEY)
+
+MODEL = "text-embedding-ada-002"
+
+def embed(data):
     
-    var_fn = {}
+    response = client.embeddings.create(
+        input=data,
+        model=MODEL
+    )
     
-    index_result = query_index(client=client, model=model, index=index, prompt=prompt)
-    var_fn.update({'index_result': index_result})
+    vector = response.data[0].embedding
     
-    file_ids = []
-    for res in index_result:
-        file_id = res.split(': ')[1]
-        file_ids.append(file_id)
-        
-    contents = read_docs(file_ids=file_ids)
+    #print(vector)
     
-    response = generate_answer(client=client, prompt=prompt, contents=contents)
-    var_fn.update({'response': response})
-    answer = var_fn.get('response', '')
+    return vector
+
+def query(text:str, index_name, top_k=1):
     
-    return answer
+    vector = embed(text)
+    
+    index = pc.Index(index_name)
+    
+    res = index.query(
+        vector=vector,
+        top_k=top_k,
+        include_values=False
+        )
+    
+    return res['matches']
